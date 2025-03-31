@@ -1,38 +1,45 @@
-// Initialisation de la scène Three.js
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("gameCanvas") });
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+document.addEventListener("DOMContentLoaded", function() {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("gameCanvas") });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
 
-// Lumière
-const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(5, 10, 7).normalize();
-scene.add(light);
+    // Lumière
+    const light = new THREE.AmbientLight(0xffffff);
+    scene.add(light);
 
-// Création des blocs
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
+    // Terrain
+    const blockSize = 1;
+    const terrainSize = 10;
+    const blocks = [];
+    const textureLoader = new THREE.TextureLoader();
+    const grassTexture = textureLoader.load('assets/grass_block.png');
 
-const gridSize = 10;
-const blocks = [];
-
-for (let x = -gridSize / 2; x < gridSize / 2; x++) {
-    for (let z = -gridSize / 2; z < gridSize / 2; z++) {
+    function createBlock(x, y, z) {
+        const geometry = new THREE.BoxGeometry(blockSize, blockSize, blockSize);
+        const material = new THREE.MeshStandardMaterial({ map: grassTexture });
         const block = new THREE.Mesh(geometry, material);
-        block.position.set(x, 0, z);
+        block.position.set(x, y, z);
         scene.add(block);
         blocks.push(block);
     }
-}
 
-camera.position.set(0, 5, 10);
-camera.lookAt(0, 0, 0);
+    for (let x = -terrainSize / 2; x < terrainSize / 2; x++) {
+        for (let z = -terrainSize / 2; z < terrainSize / 2; z++) {
+            createBlock(x, -0.5, z);
+        }
+    }
 
-// Boucle d'animation
-function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-}
+    // Contrôles FPS
+    const controls = new THREE.PointerLockControls(camera, document.body);
+    document.addEventListener("click", () => controls.lock());
+    scene.add(controls.getObject());
 
-animate();
+    // Animation
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    }
+    animate();
+});
