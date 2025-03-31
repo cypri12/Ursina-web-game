@@ -16,7 +16,7 @@ def safe_load_texture(path, fallback='white_cube'):
         return load_texture(fallback)
 
 textures = {
-    'grass': safe_load_texture('assets/grass_block'),
+    'grass': safe_load_texture('grass_block'),
     'stone': safe_load_texture('assets/stone_block'),
 }
 
