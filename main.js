@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const terrainSize = 10;
     const blocks = [];
     const textureLoader = new THREE.TextureLoader();
-    const grassTexture = textureLoader.load('assets/grass_block.png');
+    const grassTexture = textureLoader.load('grass_block.png');
 
     function createBlock(x, y, z) {
         const geometry = new THREE.BoxGeometry(blockSize, blockSize, blockSize);
