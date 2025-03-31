@@ -5,6 +5,9 @@ document.addEventListener("DOMContentLoaded", function() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
+    // Importation correcte des contrôles
+    import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js';
+
     // Lumière
     const light = new THREE.AmbientLight(0xffffff);
     scene.add(light);
@@ -14,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const terrainSize = 10;
     const blocks = [];
     const textureLoader = new THREE.TextureLoader();
-    const grassTexture = textureLoader.load('grass_block.png');
+    const grassTexture = textureLoader.load('assets/grass_block.png');
 
     function createBlock(x, y, z) {
         const geometry = new THREE.BoxGeometry(blockSize, blockSize, blockSize);
@@ -32,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Contrôles FPS
-    const controls = new THREE.PointerLockControls(camera, document.body);
+    const controls = new PointerLockControls(camera, document.body);
     document.addEventListener("click", () => controls.lock());
     scene.add(controls.getObject());
 
